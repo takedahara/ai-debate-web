@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Debate - AIディベートシミュレーター</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>✨ AI DEBATE ✨</h1>
+            <p class="subtitle">AIキャラクターによるディベートシミュレーション</p>
+        </header>
+
+        <!-- Setup Section -->
+        <section id="setup-section" class="section">
+            <h2>APIキー設定</h2>
+            <div class="form-group">
+                <label for="api-key-input">Groq APIキー:</label>
+                <div class="api-key-wrapper">
+                    <input
+                        type="password"
+                        id="api-key-input"
+                        placeholder="gsk_xxxxxxxxxxxxxxxx"
+                    >
+                    <button type="button" id="toggle-api-key" class="btn-icon" title="表示/非表示">👁</button>
+                </div>
+                <small class="help-text">
+                    <a href="https://console.groq.com/keys" target="_blank" rel="noopener">Groq Console</a>
+                    で無料で取得できます（保存するとブラウザに記憶されます）
+                </small>
+            </div>
+
+            <h2>議題を設定</h2>
+            <div class="form-group">
+                <label for="topic-input">議題:</label>
+                <input
+                    type="text"
+                    id="topic-input"
+                    placeholder="AIは人間の仕事を奪う"
+                    value="AIは人間の仕事を奪う"
+                    maxlength="200"
+                >
+            </div>
+            <button id="start-btn" class="btn btn-primary">ディベート開始</button>
+        </section>
+
+        <!-- Character Display -->
+        <section id="debate-section" class="section hidden">
+            <div class="topic-display">
+                <span class="topic-icon">📢</span>
+                <span id="topic-text">議題: </span>
+            </div>
+
+            <div class="characters">
+                <div class="character pro">
+                    <div class="character-avatar" id="pro-avatar">
+                        <img src="/assets/pro_closed.png" alt="さくら" class="avatar-img" id="pro-img">
+                    </div>
+                    <div class="character-name" id="pro-name">さくら</div>
+                    <div class="character-role">賛成派</div>
+                </div>
+
+                <div class="vs-badge">⚔️</div>
+
+                <div class="character con">
+                    <div class="character-avatar" id="con-avatar">
+                        <img src="/assets/con_closed.png" alt="あおい" class="avatar-img" id="con-img">
+                    </div>
+                    <div class="character-name" id="con-name">あおい</div>
+                    <div class="character-role">反対派</div>
+                </div>
+            </div>
+
+            <!-- Debate Log -->
+            <div class="debate-log" id="debate-log">
+                <div class="log-placeholder">ディベートが始まると、ここに会話が表示されます...</div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button id="stop-btn" class="btn btn-secondary" disabled>
+                    ⏸ 一時停止
+                </button>
+                <button id="judge-btn" class="btn btn-warning" disabled>
+                    終了＆判定
+                </button>
+                <button id="reset-btn" class="btn btn-outline">
+                    リセット
+                </button>
+            </div>
+
+            <!-- Speech Settings -->
+            <div class="speech-settings">
+                <h3>🔊 音声設定</h3>
+                <div class="setting-row">
+                    <label>
+                        <input type="checkbox" id="speech-enabled" checked>
+                        読み上げ有効
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <label for="speech-rate">速度:</label>
+                    <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="1.2">
+                    <span id="speech-rate-value">1.2</span>
+                </div>
+                <div class="setting-row">
+                    <label for="voice-select">音声:</label>
+                    <select id="voice-select">
+                        <option value="">デフォルト</option>
+                    </select>
+                </div>
+                <button id="stop-speech-btn" class="btn btn-small">読み上げ停止</button>
+            </div>
+        </section>
+
+        <!-- Status indicator (small, non-blocking) -->
+        <div id="status-indicator" class="status-indicator hidden">
+            <span class="status-dot"></span>
+            <span class="status-text">考え中...</span>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/speech.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

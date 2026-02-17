@@ -1,0 +1,21 @@
+# Web Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# LLM APIs
+groq>=0.4.0
+google-generativeai>=0.3.0
+
+# HTTP Client
+requests>=2.31.0
+
+# Image Processing (for existing Tkinter apps)
+pillow>=10.0.0
+
+# Environment & Config
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Rate Limiting
+slowapi>=0.1.9
