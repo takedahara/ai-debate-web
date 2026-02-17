@@ -9,18 +9,26 @@ def setup_cors(app: FastAPI) -> None:
     """Configure CORS middleware
 
     Reads ALLOWED_ORIGINS from environment variable.
-    Default: localhost:3000 and localhost:8000
+    Default: allows all origins for simplicity (can be restricted in production)
     """
-    origins_str = os.getenv(
-        "ALLOWED_ORIGINS",
-        "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000"
-    )
-    origins = [origin.strip() for origin in origins_str.split(",") if origin.strip()]
+    origins_str = os.getenv("ALLOWED_ORIGINS", "")
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=["GET", "POST", "OPTIONS"],
-        allow_headers=["*"],
-    )
+    if origins_str:
+        # 環境変数で指定されている場合はそれを使用
+        origins = [origin.strip() for origin in origins_str.split(",") if origin.strip()]
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=origins,
+            allow_credentials=True,
+            allow_methods=["GET", "POST", "OPTIONS"],
+            allow_headers=["*"],
+        )
+    else:
+        # 指定がない場合は全てのオリジンを許可（開発・デモ用）
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=False,  # allow_origins=["*"]の場合はFalseにする必要がある
+            allow_methods=["GET", "POST", "OPTIONS"],
+            allow_headers=["*"],
+        )

@@ -204,11 +204,19 @@ class DebateApp {
      * @private
      */
     _startMouthAnimation() {
-        if (this.mouthAnimationInterval) return;
+        // 既存のアニメーションを停止
+        this._stopMouthAnimation();
 
         const proImg = document.getElementById('pro-img');
         const conImg = document.getElementById('con-img');
         let mouthOpen = false;
+
+        // 話していない方は常に閉じた口
+        if (this.currentSpeaker === 'pro' && conImg) {
+            conImg.src = '/assets/con_closed.png';
+        } else if (this.currentSpeaker === 'con' && proImg) {
+            proImg.src = '/assets/pro_closed.png';
+        }
 
         this.mouthAnimationInterval = setInterval(() => {
             mouthOpen = !mouthOpen;
@@ -217,7 +225,7 @@ class DebateApp {
             } else if (this.currentSpeaker === 'con' && conImg) {
                 conImg.src = mouthOpen ? '/assets/con_open.png' : '/assets/con_closed.png';
             }
-        }, 150); // 口パクの速度
+        }, 120); // 口パクの速度（少し速く）
     }
 
     /**
@@ -321,6 +329,9 @@ class DebateApp {
             alert('議題を入力してください');
             return;
         }
+
+        // iOS用：ユーザー操作時に音声を有効化
+        speechManager.unlock();
 
         this._setLoading(true, 'ディベートを開始しています...');
 

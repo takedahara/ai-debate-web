@@ -13,6 +13,7 @@ class SpeechManager {
         this.currentUtterance = null;
         this.onSpeakStart = null;
         this.onSpeakEnd = null;
+        this.isUnlocked = false; // iOS用フラグ
 
         // Load voices
         this._loadVoices();
@@ -21,6 +22,19 @@ class SpeechManager {
         if (this.synthesis.onvoiceschanged !== undefined) {
             this.synthesis.onvoiceschanged = () => this._loadVoices();
         }
+    }
+
+    /**
+     * Unlock audio for iOS (must be called from user interaction)
+     */
+    unlock() {
+        if (this.isUnlocked) return;
+
+        // iOS requires a user gesture to enable audio
+        const utterance = new SpeechSynthesisUtterance('');
+        utterance.volume = 0;
+        this.synthesis.speak(utterance);
+        this.isUnlocked = true;
     }
 
     /**
